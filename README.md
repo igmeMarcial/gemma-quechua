@@ -9,14 +9,32 @@ gemma-quechua/
 ├── requirements.txt ← dependencias: unsloth, datasets, PyMuPDF, nltk...
 └── README.md ← descripción del proyecto y pasos
 
+gemma-quechua/
+├── src/
+│ └── quechua/ ← tu paquete importable
+│ ├── **init**.py
+│ ├── extract_text.py ←
+│ └── clean_text.py ← movido desde scripts/
+├── data/
+│ └── quechua_corpus.txt
+├── notebooks/
+│ └── pretrain_gemma_unsloth.ipynb
+├── requirements.txt
+├── README.md
+├── setup.py
+
 # Crear entorno virtual (si no existe)
 
 python -m venv .venv
 
-# Activar el entorno
+# Create, Activate Virtual Environment in Linux
 
-.\.venv\Scripts\Activate.ps1
+python -m venv .venv && source .venv/bin/activate
+
+# Create, Activate Virtual Environment in Windows
+
+python -m venv .venv && .venv\Scripts\activate
 
 # Instalar en modo desarrollo (editable)
 
-pip install -e .
+pip install -r requirements.txt

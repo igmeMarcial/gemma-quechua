@@ -1,0 +1,54 @@
+# === Python cache ===
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+*.pyo
+
+# === Virtualenv ===
+.venv/
+env/
+ENV/
+venv/
+.idea/
+
+# === VSCode ===
+.vscode/
+
+# === System ===
+.DS_Store
+Thumbs.db
+
+# === Jupyter Notebooks Checkpoints ===
+.ipynb_checkpoints/
+
+# === Logs / temp files ===
+*.log
+*.tmp
+*.bak
+
+# === Data ===
+data/raw_pdfs/
+data/extracted_text/
+data/raw_text/
+data/*.json
+data/*.csv
+data/*.zip
+
+# === HuggingFace cache ===
+.cache/
+datasets/
+*.tokenizer
+*.model
+
+# === Model outputs / training ===
+outputs/
+checkpoints/
+models/
+*.pt
+*.bin
+*.ckpt
+
+# === Kaggle / credentials ===
+kaggle.json
