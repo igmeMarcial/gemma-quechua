@@ -11,19 +11,22 @@ INSTRUCTION_TEMPLATES = [
 ]
 
 # Asumimos que tienes un archivo de texto limpio con párrafos en quechua
-SOURCE_TEXT_FILE = '../data/cleaned_quechua_corpus.txt' 
+SOURCE_TEXT_FILE = '../data/raw_text/quechua_corpus.txt' 
 OUTPUT_JSONL_FILE = '../data/quechua_dataset.jsonl'
 CHAT_TEMPLATE = "<s>[INST] {instruction} [/INST] {output}</s>"
+
+
 
 def create_dataset_from_text():
     """
     Lee un corpus de texto y lo convierte en un dataset de instrucciones
     en formato JSONL, listo para Unsloth.
+    
+    Read a text corpus and convert it into an instruction dataset
+    in JSONL format, ready for Unsloth.
     """
     with open(SOURCE_TEXT_FILE, 'r', encoding='utf-8') as f:
-        # Lee párrafos, asumiendo que están separados por líneas en blanco
         paragraphs = [p.strip() for p in f.read().split('\n\n') if p.strip()]
-
     print(f"Procesando {len(paragraphs)} párrafos para crear el dataset de instrucciones.")
 
     dataset_entries = []

@@ -1,3 +1,5 @@
+#### Supervised Fine-tuning (SFT)
+
 gemma-quechua/
 ├── data/
 │ └── quechua_corpus.txt ← corpus limpio en quechua (raw text)
@@ -23,7 +25,7 @@ gemma-quechua/
 ├── README.md
 ├── setup.py
 
-# Crear entorno virtual (si no existe)
+# Create Virtual Environment
 
 python -m venv .venv
 
@@ -38,3 +40,21 @@ python -m venv .venv && .venv\Scripts\activate
 # Instalar en modo desarrollo (editable)
 
 pip install -r requirements.txt
+
+
+
+
+🚀 ¿Qué deberías hacer ahora?
+Paso 1: Extraer texto de tus PDFs en quechua
+→ Te puedo dar un script en Python con PyMuPDF que lo haga.
+
+Paso 2: Limpiar ese texto y convertirlo en .jsonl
+→ Te ayudaré a hacer un script que genere {"text": "...", "language": "quechua"} por línea.
+
+Paso 3: Usar synthetic-dataset-generator para crear instrucciones y respuestas.
+→ Aquí usarás tus textos como "seed" para generar prompts del tipo:
+
+json
+Copy
+Edit
+{"instruction": "Resume este texto en quechua", "input": "text", "output": "..." }

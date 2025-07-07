@@ -2,3 +2,7 @@ PyMuPDF
 datasets
 nltk
 unsloth
+
+marker-pdf[full]
+jsonlines 
+tqdm

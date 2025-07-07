@@ -4,8 +4,8 @@ import fitz
 
 
 
-PDF_SOURCE_DIR = 'E:/kaggle/gemma_data/files'
-TEXT_OUTPUT_DIR = '/data/raw_text/'
+PDF_SOURCE_DIR = 'E:/kaggle/gemma_data/filesNew'
+TEXT_OUTPUT_DIR = 'E:/kaggle/gemma-quechua/data/raw_text'
 
 os.makedirs(TEXT_OUTPUT_DIR, exist_ok=True)
 
@@ -27,7 +27,7 @@ def extract_text_from_pdfs():
             full_text = ""
             for page in doc:
                 full_text += page.get_text()
-            with open(text_path, 'w', encoding='utf-8') as f:
+            with open(text_path, 'w', encoding='utf-8-sig') as f:
                 f.write(full_text)
             print(f"Texto extraído de {pdf_path} y guardado en {text_path}")
         except Exception as e:
