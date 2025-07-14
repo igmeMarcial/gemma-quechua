@@ -6,3 +6,4 @@ unsloth
 marker-pdf[full]
 jsonlines 
 tqdm
+distilabel 

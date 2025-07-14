@@ -41,9 +41,6 @@ python -m venv .venv && .venv\Scripts\activate
 
 pip install -r requirements.txt
 
-
-
-
 🚀 ¿Qué deberías hacer ahora?
 Paso 1: Extraer texto de tus PDFs en quechua
 → Te puedo dar un script en Python con PyMuPDF que lo haga.
@@ -58,3 +55,11 @@ json
 Copy
 Edit
 {"instruction": "Resume este texto en quechua", "input": "text", "output": "..." }
+
+{
+"instruction": "Imapaqmi allin llama uywa, Inkakunap pachankupi?",
+"input": "",
+"output": "Llamaqa allinmi karqan llank'anapaq, aychanta mikhunapaq, chaymanta millmanwan p'achakunata ruwanapaq."
+}
+
+Objetivo: Hacer que Gemma "piense" en quechua. No le enseñas a ser un chatbot, le enseñas el idioma en profundidad: su gramática, vocabulario, y cómo se conectan las ideas.

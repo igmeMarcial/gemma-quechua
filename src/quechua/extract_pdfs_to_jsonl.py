@@ -7,8 +7,8 @@ from marker.output import text_from_rendered
 from marker.config.parser import ConfigParser
 
 
-INPUT_FOLDER = "E:/kaggle/gemma_data/test2"
-OUTPUT_FILE = "E:/kaggle/gemma-quechua/data/raw_jsonl/quechua_dataset_marker2.jsonl"
+INPUT_FOLDER = "gemma_data/raw_pdfs"
+OUTPUT_DIR = "gemma_data/raw_jsonl"
 
 
 def extract_text_with_marker(pdf_path):
@@ -40,25 +40,29 @@ def extract_text_with_marker(pdf_path):
 def main():
     pdf_files = [f for f in os.listdir(INPUT_FOLDER) if f.lower().endswith(".pdf")]
 
-    with jsonlines.open(OUTPUT_FILE, mode="w") as writer:
-        for filename in tqdm(pdf_files, desc="Extrayendo PDFs con Marker"):
-            pdf_path = os.path.join(INPUT_FOLDER, filename)
-            try:
-                text = extract_text_with_marker(pdf_path)
-                if text:
+    for filename in tqdm(pdf_files, desc="Extrayendo PDFs con Marker"):
+        pdf_path = os.path.join(INPUT_FOLDER, filename)
+        try:
+            text = extract_text_with_marker(pdf_path)
+            if text:
+                output_file = os.path.join(
+                    OUTPUT_DIR, filename.replace(".pdf", ".jsonl")
+                )
+                with jsonlines.open(output_file, mode="w") as writer:
                     writer.write(
                         {
                             "id": filename.replace(".pdf", ""),
                             "text": text,
-                            "metadata": {"source": filename, "processor": "marker-pdf"},
+                            "metadata": {
+                                "source": filename,
+                                "processor": "marker-pdf",
+                            },
                         }
                     )
-            except Exception as e:
-                print(f"Error al procesar {filename}: {e}")
+        except Exception as e:
+            print(f"Error al procesar {filename}: {e}")
 
-    print(
-        f"\n✅ Extracción completada con Marker. Archivo guardado como: {OUTPUT_FILE}"
-    )
+    print(f"\n✅ Extracción completada con Marker. Archivo guardado como: {OUTPUT_DIR}")
 
 
 if __name__ == "__main__":
