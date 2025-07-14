@@ -52,3 +52,6 @@ models/
 
 # === Kaggle / credentials ===
 kaggle.json
+
+# examples
+examples/

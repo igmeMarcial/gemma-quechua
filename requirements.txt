@@ -7,3 +7,4 @@ marker-pdf[full]
 jsonlines 
 tqdm
 distilabel 
+pdf2image
