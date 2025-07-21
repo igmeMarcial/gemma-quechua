@@ -8,12 +8,14 @@ from tqdm import tqdm
 
 print("✅ (1/8) Importaciones y configuración inicial completas.")
 MODEL_NAME = "unsloth/gemma-3n-E4B-it"
-DATASET_PATH = "quechua_hf_alpaca.jsonl"
-OUTPUT_DIR = "outputs/gemma-3n-quechua-translator"
-MAX_SEQ_LENGTH = 1024
-MAX_STEPS = 1200
+DATASET_PATH = "gemma_data/quechua_hf_alpaca.jsonl"
+OUTPUT_DIR = "outputs/gemma-3n-quechua"
+MAX_SEQ_LENGTH = 2048
 BATCH_SIZE = 2
 GRAD_ACCUMULATION = 4
+LR = 2e-4
+EPOCHS = 1
+
 
 # ==============================================================================
 # 2. Cargar Modelo y Tokenizer
@@ -34,6 +36,10 @@ print("   - Modelo y tokenizer cargados.")
 print("✅ (3/8) Aplicando adaptadores LoRA al modelo...")
 model = FastModel.get_peft_model(
     model,
+    finetune_vision_layers=False,
+    finetune_language_layers=True,
+    finetune_attention_modules=True,
+    finetune_mlp_modules=True,
     r=16,
     lora_alpha=16,
     target_modules=[
@@ -70,8 +76,8 @@ def alpaca_to_sharegpt(examples):
         if input_text:
             user_content += f"\n{input_text}"
         convo = [
-            {"from": "user", "content": user_content},
-            {"from": "assistant", "content": output_text},
+            {"role": "user", "content": user_content},
+            {"role": "assistant", "content": output_text},
         ]
         conversations.append(convo)
     return {"conversations": conversations}
@@ -81,9 +87,8 @@ dataset = load_dataset("json", data_files={"train": DATASET_PATH}, split="train"
 dataset = dataset.map(
     alpaca_to_sharegpt, batched=True, remove_columns=["instruction", "input", "output"]
 )
-print(
-    f"   - Dataset convertido al formato ShareGPT. Ejemplos estimados: {dataset.num_rows if hasattr(dataset, 'num_rows') else 'desconocido'}"
-)
+if isinstance(dataset, dict):
+    dataset = Dataset.from_dict(dataset)
 
 # ==============================================================================
 # 5. Aplicar la Plantilla de Chat de Gemma-3
@@ -100,7 +105,7 @@ def formatting_prompts_func(examples):
     texts = [
         tokenizer.apply_chat_template(
             convo, tokenize=False, add_generation_prompt=False
-        )
+        ).removeprefix("<bos>")
         for convo in convos
     ]
     return {"text": texts}
@@ -108,6 +113,13 @@ def formatting_prompts_func(examples):
 
 dataset = dataset.map(formatting_prompts_func, batched=True)
 print("   - Plantilla de chat aplicada. El dataset está listo para el SFTTrainer.")
+print("\n" + "=" * 60)
+print("🔍 VERIFICACIÓN DEL FORMATO PROCESADO:")
+print("=" * 60)
+print("Ejemplo del primer registro procesado:")
+first = next(iter(dataset))
+print(first["text"][:300] + "..." if len(first["text"]) > 300 else first["text"])
+print("=" * 60 + "\n")
 
 # ==============================================================================
 # 6. Definir el Entrenador (SFTTrainer)
@@ -116,16 +128,18 @@ print("✅ (6/8) Configurando el SFTTrainer...")
 
 trainer = SFTTrainer(
     model=model,
+    eval_dataset=None,
     train_dataset=dataset,
     args=SFTConfig(
+        dataset_text_field="text",
         per_device_train_batch_size=BATCH_SIZE,
         gradient_accumulation_steps=GRAD_ACCUMULATION,
         warmup_steps=10,
-        max_steps=MAX_STEPS,
-        learning_rate=2e-4,
+        num_train_epochs=EPOCHS,
+        learning_rate=LR,
         fp16=not torch.cuda.is_bf16_supported(),
         bf16=torch.cuda.is_bf16_supported(),
-        logging_steps=1,
+        logging_steps=10,
         optim="adamw_8bit",
         weight_decay=0.01,
         lr_scheduler_type="linear",
@@ -136,10 +150,11 @@ trainer = SFTTrainer(
 )
 print("   - Trainer configurado.")
 
+
 # ==============================================================================
-# 7. Optimización: Entrenar solo en las Respuestas
+# 7. Habilitar Entrenamiento solo en Respuestas
 # ==============================================================================
-print("✅ (7/8) Configurando para entrenar solo en las respuestas del asistente...")
+print("✅ (7/9) Habilitando el entrenamiento solo en las respuestas del asistente...")
 trainer = train_on_responses_only(
     trainer,
     instruction_part="<start_of_turn>user\n",
@@ -148,10 +163,19 @@ trainer = train_on_responses_only(
 print("   - Máscara de entrenamiento aplicada.")
 
 # ==============================================================================
-# 8. Iniciar el Entrenamiento y Guardar
+# 8. Mostrar Estadísticas de Memoria
 # ==============================================================================
 
-print(f"🚀 (8/8) ¡Iniciando entrenamiento por {MAX_STEPS} pasos!")
+gpu_stats = torch.cuda.get_device_properties(0)
+start_gpu_memory = round(torch.cuda.max_memory_reserved() / 1024 / 1024 / 1024, 3)
+max_memory = round(gpu_stats.total_memory / 1024 / 1024 / 1024, 3)
+print(f"GPU = {gpu_stats.name}. Max memory = {max_memory} GB.")
+print(f"{start_gpu_memory} GB of memory reserved.")
+# ==============================================================================
+# 9. Iniciar el Entrenamiento y Guardar
+# ==============================================================================
+
+print(f"🚀 (9/9) ¡Iniciando entrenamiento por {EPOCHS} pasos!")
 trainer.train()
 print("   - Entrenamiento finalizado.")
 

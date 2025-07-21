@@ -1,65 +1,54 @@
-#### Supervised Fine-tuning (SFT)
+# 🦙 Quechua Language Fine-Tuning for Gemma 3
 
-gemma-quechua/
-├── data/
-│ └── quechua_corpus.txt ← corpus limpio en quechua (raw text)
-├── notebooks/
-│ └── pretrain_gemma_unsloth.ipynb ← notebook para entrenamiento
-├── scripts/
-│ ├── extract_text.py ← extrae texto de PDF/DOCX
-│ └── clean_text.py ← limpieza básica del texto
-├── requirements.txt ← dependencias: unsloth, datasets, PyMuPDF, nltk...
-└── README.md ← descripción del proyecto y pasos
+![Gemma and Quechua](https://via.placeholder.com/800x200?text=Gemma+3+%2B+Quechua+Language)
 
-gemma-quechua/
-├── src/
-│ └── quechua/ ← tu paquete importable
-│ ├── **init**.py
-│ ├── extract_text.py ←
-│ └── clean_text.py ← movido desde scripts/
-├── data/
-│ └── quechua_corpus.txt
-├── notebooks/
-│ └── pretrain_gemma_unsloth.ipynb
-├── requirements.txt
-├── README.md
-├── setup.py
+This project fine-tunes Google's Gemma 3 model to deeply understand Quechua language structure, grammar, and semantics using Unsloth for efficient training.
 
-# Create Virtual Environment
+## 🌟 Project Vision
 
-python -m venv .venv
+**Objective:** Make Gemma "think" in Quechua by teaching:
 
-# Create, Activate Virtual Environment in Linux
+- Deep language understanding (grammar, vocabulary)
+- How ideas connect in Quechua
+- Natural language patterns (not just chatbot responses)
 
-python -m venv .venv && source .venv/bin/activate
+## 🛠️ Technical Implementation
 
-# Create, Activate Virtual Environment in Windows
+## 🚀 Getting Started
 
-python -m venv .venv && .venv\Scripts\activate
+### 1. Environment Setup
 
-# Instalar en modo desarrollo (editable)
+```bash
+# Create and activate virtual environment
+python -m venv .venv && source .venv/bin/activate  # Linux/Mac
+python -m venv .venv && .venv\Scripts\activate    # Windows
 
+# Install dependencies
 pip install -r requirements.txt
+```
 
-🚀 ¿Qué deberías hacer ahora?
-Paso 1: Extraer texto de tus PDFs en quechua
-→ Te puedo dar un script en Python con PyMuPDF que lo haga.
+## 🗂️ 2. Prepare Your Quechua Dataset
 
-Paso 2: Limpiar ese texto y convertirlo en .jsonl
-→ Te ayudaré a hacer un script que genere {"text": "...", "language": "quechua"} por línea.
+### Required Dataset Format
 
-Paso 3: Usar synthetic-dataset-generator para crear instrucciones y respuestas.
-→ Aquí usarás tus textos como "seed" para generar prompts del tipo:
+Place your training files in `gemma-data/` directory using **Alpaca-style JSONL** format. Each line should contain:
 
-json
-Copy
-Edit
-{"instruction": "Resume este texto en quechua", "input": "text", "output": "..." }
-
+```json
 {
-"instruction": "Imapaqmi allin llama uywa, Inkakunap pachankupi?",
-"input": "",
-"output": "Llamaqa allinmi karqan llank'anapaq, aychanta mikhunapaq, chaymanta millmanwan p'achakunata ruwanapaq."
+  "instruction": "Translate to Quechua",
+  "input": "Good morning",
+  "output": "Allin p'unchay"
 }
+```
 
-Objetivo: Hacer que Gemma "piense" en quechua. No le enseñas a ser un chatbot, le enseñas el idioma en profundidad: su gramática, vocabulario, y cómo se conectan las ideas.
+## 🚀 3. Train Model
+
+### Basic Command
+
+```bash
+python train_gemma3_sft.py
+```
+
+## 🧑‍💻 Author
+
+Developed by Marcial Igme for the Gemma 3n Impact Challenge.
