@@ -5,6 +5,9 @@ from unsloth.chat_templates import get_chat_template, train_on_responses_only
 from datasets import load_dataset, Dataset
 from trl import SFTTrainer, SFTConfig
 from tqdm import tqdm
+import torch._dynamo
+
+torch._dynamo.disable()
 
 print("✅ (1/8) Importaciones y configuración inicial completas.")
 MODEL_NAME = "unsloth/gemma-3n-E4B-it"
