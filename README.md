@@ -103,3 +103,6 @@ python train_gemma3_sft.py
 ## 🧑‍💻 Author
 
 This project was developed with passion by Marcial Igme for the Gemma 3n Impact Challenge. As a developer and native Quechua speaker, I created this project to show that cutting-edge AI can—and must—serve to preserve, protect, and empower our native languages and cultures. Quechua is my mother tongue, and that personal connection is what drives my commitment to building tools that support my community.
+
+cd /workspace
+tar -czvf gemma3_quechua_model.tar.gz gemma3_quechua_model

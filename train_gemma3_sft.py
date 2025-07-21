@@ -53,7 +53,6 @@ model = FastModel.get_peft_model(
     ],
     lora_dropout=0,
     bias="none",
-    use_gradient_checkpointing="unsloth",
     random_state=3407,
 )
 print("   - Adaptadores LoRA aplicados.")
