@@ -29,7 +29,7 @@ Thumbs.db
 *.bak
 
 # === Data ===
-data/
+data/*
 data/raw_pdfs/
 data/extracted_text/
 data/raw_text/
