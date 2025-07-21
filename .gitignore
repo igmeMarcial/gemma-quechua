@@ -29,13 +29,7 @@ Thumbs.db
 *.bak
 
 # === Data ===
-data/*
-data/raw_pdfs/
-data/extracted_text/
-data/raw_text/
-data/*.json
-data/*.csv
-data/*.zip
+data/**/*
 
 # === HuggingFace cache ===
 .cache/
