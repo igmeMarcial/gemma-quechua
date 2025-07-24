@@ -23,7 +23,7 @@ This project directly addresses the core pillars of the hackathon:
 
 **Llaqta-Simi** is a language model, powered by **Gemma 3N**, that has been meticulously fine-tuned to become an expert translator between Spanish and Quechua.
 
-**[🎥 WATCH THE 3-MINUTE VIDEO DEMO] (https://your-video-link-on-youtube.com)**
+**[🎥 WATCH THE 3-MINUTE VIDEO DEMO] (https://nolinkfornow.com)**
 _(This is the most important link! Make it prominent.)_
 
 ### ✨ Key Features
